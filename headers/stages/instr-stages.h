@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <instr.h>
+
 typedef enum {
 	FETCH_STAGE,
 	DECODE_STAGE,
@@ -12,11 +14,26 @@ typedef enum {
 } proc_stage_t;
 
 typedef enum {
+	FETCH_MCYCLE,
+	MEMORY_READ_MCYCLE,
+	MEMORY_WRITE_MCYCLE,
+	STACK_READ_MCYCLE,
+	STACK_WRITE_MCYCLE,
+	// INPUT_MCYCLE,
+	// OUTPUT_MCYCLE,
+	// INTERRUPT_MCYCLE,
+	HALT_MCYCLE,
+	// HALT_INTERRUP_MCYCLE
+} machine_cycle_t;
+
+typedef enum {
 	PLUS_OP,
 	MINUS_OP,
 	OR_OP,
 	XOR_OP,
-	AND_OP
+	AND_OP,
+	NOT_OP,
+	PASS_OP
 } alu_op_t;
 
 typedef struct ctrlSigs {
@@ -47,5 +64,13 @@ typedef struct state {
 
 
 void fetch();
+void decode(opcode_t* opcode, alu_op_t* aluop);
+
+/**
+ * Initiates the given machine cycle type.
+ * This only sets up the signals and state.
+ * @param machineCycle 
+ */
+extern void initMachineCycle(machine_cycle_t machineCycle);
 
 #endif

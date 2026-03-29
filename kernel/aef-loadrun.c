@@ -60,7 +60,7 @@ uint16_t loadAEF(const char* filename) {
 
 	for (int i = 0; i < size; i++) {
 		uint8_t byte = data[i];
-		// printf("Loading byte 0x%x at 0x%x\n", byte, i);
+		printf("Loading byte 0x%x at 0x%x\n", byte, i);
 		guest.mem->ram[i] = byte;
 	}
 
@@ -83,15 +83,26 @@ int runAEF(const uint16_t entry) {
 
 	// State.statusSigs.
 
+	size_t cycles = 0;
+
 	do {
 		fetch();
 
 		// printf("Fetched instruction: 0x%x\n", guest.proc->IR);
-
-		// decode();
+		alu_op_t aluop;
+		opcode_t opcode;
+		decode(&opcode, &aluop);
 		// execute();
-		break;
-	} while (!State.ctrSigs.WAIT);
+
+		printf("\nProcessor state:\n");
+		printf("PC: 0x%x\n", guest.proc->PC);
+		printf("SP: 0x%x\n", guest.proc->SP);
+		printf("IR: 0x%x\n", guest.proc->IR);
+		printf("eflags: 0x%x\n\n", guest.proc->eflags);
+
+		cycles++;
+		// break;
+	} while (!State.ctrSigs.WAIT && cycles < 5);
 		
 	return 0;
 }

@@ -15,24 +15,25 @@ void fetch() {
 	State.ctrSigs._WR = true;
 
 	// T1
-	AddrBus = guest.proc->PC;
+	AddrBus = guest.proc->PC++;
 	sendStatusToData();
 
 	// printf("AddrBus: 0x%x; DataBus: 0x%x\n", AddrBus, DataBus);
 
 	// T2
+	// DBIN true for the incoming data, not status
 	State.ctrSigs.DBIN = true;
 	latchStatus();
 
 	// printf("CtrlBus: 0x%x\n", CtrlBus);
 
-	if (State.statusSigs.HLTA) {
-		// Enter halt state
-		// For now, it means subsequent functions are not ran
-		State.ctrSigs.INTE = true;
-		State.ctrSigs.WAIT = true;
-		return;
-	}
+	// if (State.statusSigs.HLTA) {
+	// 	// Enter halt state
+	// 	// For now, it means subsequent functions are not ran
+	// 	State.ctrSigs.INTE = true;
+	// 	State.ctrSigs.WAIT = true;
+	// 	return;
+	// }
 
 	// Processor entering TW state
 	mem();
@@ -40,4 +41,6 @@ void fetch() {
 	// T3
 	State.intdatabus = DataBus;
 	guest.proc->IR = State.intdatabus;
+
+	printf("Fetched instruction is 0x%x\n", guest.proc->IR);
 }

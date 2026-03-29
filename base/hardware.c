@@ -98,3 +98,26 @@ void mem() {
 
 	State.ctrSigs.WAIT = false;
 }
+
+static void T1() {
+	
+}
+
+void initMachineCycle(machine_cycle_t machineCycle) {
+	if (machineCycle == MEMORY_READ_MCYCLE) {
+		State.statusSigs.INTA = false;
+		State.statusSigs._WO = true;
+		State.statusSigs.STACK = false;
+		State.statusSigs.HLTA = false;
+		State.statusSigs.OUT = false;
+		State.statusSigs.M1 = false;
+		State.statusSigs.INP = false;
+		State.statusSigs.MEMR = true;
+
+		// AddrBus = 
+		sendStatusToData();
+
+		State.ctrSigs.DBIN = true;
+		latchStatus();
+	}
+}
